@@ -22,7 +22,6 @@
       padding: 20px 0;
     }
 
-    /* Chinese New Year Wallpaper Background */
     .bg-overlay {
       position: fixed;
       width: 100%;
@@ -56,7 +55,6 @@
                         repeating-linear-gradient(-45deg, transparent, transparent 100px, rgba(255, 0, 0, 0.02) 100px, rgba(255, 0, 0, 0.02) 102px);
     }
 
-    /* Fireworks Animation - Versi Hype & Meriah */
     .firework {
       position: fixed;
       width: 8px;
@@ -89,7 +87,6 @@
       100% { transform: scale(3); opacity: 0; }
     }
 
-    /* Lion Dance, Lanterns, dll tetap sama */
     .lion-dance {
       position: fixed;
       bottom: -100px;
@@ -607,19 +604,21 @@
   <div class="light-beam" style="animation-delay: 0s;"></div>
   <div class="light-beam" style="animation-delay: 6s;"></div>
 
-  <!-- Floating Lanterns -->
   <div class="lantern" style="top: 10%; left: 5%; animation-delay: 0s; animation-duration: 18s;"></div>
   <div class="lantern" style="top: 15%; right: 8%; animation-delay: 4s; animation-duration: 22s;"></div>
   <div class="lantern" style="top: 60%; left: 10%; animation-delay: 8s; animation-duration: 20s;"></div>
   <div class="lantern" style="top: 70%; right: 5%; animation-delay: 12s; animation-duration: 19s;"></div>
 
-  <!-- Lion Dance -->
   <div class="lion-dance"></div>
 
-  <!-- Audio Tema Imlek -->
+  <!-- Backsound Imlek -->
   <audio id="bgMusic" loop preload="auto">
     <source src="https://cdn.pixabay.com/download/audio/2026/01/14/audio_3265c1aace.mp3" type="audio/mpeg">
-    Browser Anda tidak mendukung elemen audio.
+  </audio>
+
+  <!-- Efek suara menang -->
+  <audio id="winSound" preload="auto">
+    <source src="https://cdn.pixabay.com/download/audio/2022/03/10/audio_6185.mp3?filename=success-fanfare-trumpets-6185.mp3" type="audio/mpeg">
   </audio>
 
   <div class="container">
@@ -702,13 +701,11 @@
       'Rp 200.000', 'Rp 300.000', 'Rp 500.000',
       'Rp 600.000', 'Rp 700.000', 'Rp 800.000', 'Rp 1.000.000'
     ];
-
     let selectedEnvelopeNumber = 0;
 
-    // Fireworks lebih hype
     function createFirework(x, y) {
       const colors = ['#ffd700', '#ff4500', '#ffff00', '#ff1493', '#00ffff', '#ff8c00', '#ffffff'];
-      const particleCount = 20 + Math.floor(Math.random() * 5); // 20-24 partikel
+      const particleCount = 20 + Math.floor(Math.random() * 5);
 
       for (let i = 0; i < particleCount; i++) {
         const firework = document.createElement('div');
@@ -722,7 +719,7 @@
         const angle = (Math.PI * 2 * i) / particleCount + (Math.random() - 0.5) * 0.4;
         const velocity = 80 + Math.random() * 120;
         const tx = Math.cos(angle) * velocity;
-        const ty = Math.sin(angle) * velocity - 80; // Naik dulu
+        const ty = Math.sin(angle) * velocity - 80;
 
         firework.style.setProperty('--tx', tx + 'px');
         firework.style.setProperty('--ty', ty + 'px');
@@ -730,7 +727,6 @@
 
         document.body.appendChild(firework);
 
-        // Secondary burst
         setTimeout(() => {
           const secondary = document.createElement('div');
           secondary.className = 'firework-secondary';
@@ -750,10 +746,9 @@
         const x = Math.random() * window.innerWidth;
         const y = Math.random() * (window.innerHeight * 0.7);
         createFirework(x, y);
-      }, 1800 + Math.random() * 700); // lebih sering
+      }, 1800 + Math.random() * 700);
     }
 
-    // Particles jatuh
     function createParticles() {
       setInterval(() => {
         const particle = document.createElement('div');
@@ -766,7 +761,6 @@
       }, 400);
     }
 
-    // Audio Imlek
     window.addEventListener('load', () => {
       randomFireworks();
       createParticles();
@@ -774,17 +768,12 @@
       const bgMusic = document.getElementById('bgMusic');
       bgMusic.volume = 0.25;
       bgMusic.play().catch(() => {
-        document.addEventListener('click', () => {
-          bgMusic.play();
-        }, { once: true });
+        document.addEventListener('click', () => bgMusic.play(), { once: true });
       });
     });
 
-    // Fungsi envelope
     document.getElementById('userId').addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') {
-        proceedToEnvelopeSelection();
-      }
+      if (e.key === 'Enter') proceedToEnvelopeSelection();
     });
 
     function proceedToEnvelopeSelection() {
@@ -793,9 +782,7 @@
         const input = document.getElementById('userId');
         input.style.borderColor = 'rgba(212, 175, 55, 0.8)';
         input.focus();
-        setTimeout(() => {
-          input.style.borderColor = 'rgba(212, 175, 55, 0.3)';
-        }, 1000);
+        setTimeout(() => input.style.borderColor = 'rgba(212, 175, 55, 0.3)', 1000);
         return;
       }
 
@@ -818,9 +805,16 @@
         document.getElementById('envelopeSelection').style.opacity = '0';
         setTimeout(() => {
           document.getElementById('envelopeSelection').classList.add('hidden');
+
           const randomPrize = prizes[Math.floor(Math.random() * prizes.length)];
           document.getElementById('prizeAmount').textContent = randomPrize;
           document.getElementById('prizeSection').style.display = 'block';
+
+          const winSound = document.getElementById('winSound');
+          winSound.currentTime = 0;
+          winSound.volume = 0.7;
+          winSound.play().catch(() => {});
+
           createRewardParticles();
         }, 500);
       }, 600);
@@ -843,22 +837,15 @@
       }
     }
 
-    // Tombol lanjutkan
     let continueButton = document.createElement('button');
     continueButton.textContent = 'Lanjutkan';
     continueButton.style.cssText = `
-      display: block;
-      margin: 25px auto 0;
-      background: transparent;
-      color: #D4AF37;
-      font-size: 11px;
-      font-weight: 600;
-      padding: 14px 45px;
-      border: 1px solid rgba(212, 175, 55, 0.5);
-      cursor: pointer;
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      letter-spacing: 2px;
-      text-transform: uppercase;
+      display: block; margin: 25px auto 0;
+      background: transparent; color: #D4AF37;
+      font-size: 11px; font-weight: 600;
+      padding: 14px 45px; border: 1px solid rgba(212, 175, 55, 0.5);
+      cursor: pointer; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      letter-spacing: 2px; text-transform: uppercase;
       font-family: 'Montserrat', sans-serif;
     `;
     continueButton.onmouseover = () => {
@@ -871,27 +858,27 @@
     };
     continueButton.onclick = proceedToEnvelopeSelection;
     document.getElementById('inputSection').appendChild(continueButton);
-      <!-- ... semua konten website kamu di sini (container, input, envelope, prize, dll) ... -->
+  </script>
 
-    <!-- Script troll GIF muncul saat tekan F12 / Ctrl+U / dll -->
-    <div id="trollScreen" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#000; z-index:999999; overflow:hidden;">
-      <img src="https://www.pointnthink.fr/wp-content/uploads/2023/10/EwIWWe9.gif" 
-           style="width:100%; height:100%; object-fit:contain;" alt="Troll">
-      <div style="position:absolute; bottom:20px; left:0; right:0; text-align:center; color:white; font-size:24px; font-family:Arial; text-shadow:2px 2px 10px black;">
-        Mau ngintip script? 😏 Sabun dulu bro!
-      </div>
+  <!-- === TROLL SECTION - GIF muncul saat coba inspect / view source === -->
+  <div id="trollScreen" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#000; z-index:999999; overflow:hidden;">
+    <img src="https://www.pointnthink.fr/wp-content/uploads/2023/10/EwIWWe9.gif" 
+         style="width:100%; height:100%; object-fit:contain;" alt="Troll">
+    <div style="position:absolute; bottom:20px; left:0; right:0; text-align:center; color:white; font-size:24px; font-family:Arial; text-shadow:2px 2px 10px black;">
+      Mau ngintip script? 😏 Sabun dulu bro!
     </div>
+  </div>
 
-    <script>
-    // Fungsi untuk disable event dan tampilkan troll
+  <script>
+    // Fungsi troll
     function showTroll() {
-      document.body.innerHTML = ''; // Kosongkan halaman asli
+      document.body.innerHTML = '';
       document.getElementById('trollScreen').style.display = 'block';
       document.body.style.overflow = 'hidden';
       document.body.style.pointerEvents = 'none';
     }
 
-    // Deteksi shortcut DevTools / View Source
+    // Tangkap shortcut keyboard
     document.addEventListener('keydown', function(e) {
       // F12
       if (e.keyCode === 123) {
@@ -922,7 +909,7 @@
       }
     });
 
-    // Deteksi console open via toString trick
+    // Deteksi console open (trick regex toString)
     (function() {
       const devtoolsOpen = /./;
       devtoolsOpen.toString = function() {
@@ -931,7 +918,7 @@
       console.log('%c', devtoolsOpen);
     })();
 
-    // Deteksi resize (kemungkinan DevTools docked)
+    // Deteksi resize window (kemungkinan DevTools dibuka)
     let lastWidth = window.innerWidth;
     let lastHeight = window.innerHeight;
     window.addEventListener('resize', () => {
@@ -944,11 +931,7 @@
       lastWidth = window.innerWidth;
       lastHeight = window.innerHeight;
     });
-    </script>
-
-  </body>
-</html>
   </script>
-</body>
 
+</body>
 </html>

@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KISAHSLOT - Premium Experience</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: #0a0a0a;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+      position: relative;
+      padding: 20px 0;
+    }
+
+    /* Chinese New Year Wallpaper Background */
+    .bg-overlay {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      background: linear-gradient(135deg, rgba(139, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.9) 50%, rgba(139, 0, 0, 0.7) 100%),
+                  url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400"><defs><pattern id="cny" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="30" fill="%23ff0000" opacity="0.1"/><circle cx="150" cy="150" r="25" fill="%23ffd700" opacity="0.08"/><path d="M 100 80 L 110 100 L 130 105 L 112 120 L 115 140 L 100 130 L 85 140 L 88 120 L 70 105 L 90 100 Z" fill="%23ffd700" opacity="0.06"/><rect x="20" y="130" width="40" height="50" rx="5" fill="%23ff0000" opacity="0.08"/><circle cx="170" cy="50" r="15" fill="%23ffd700" opacity="0.05"/></pattern></defs><rect width="400" height="400" fill="url(%23cny)"/></svg>');
+      background-size: cover, 400px 400px;
+      z-index: 0;
+    }
+
+    .cny-pattern {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      background-image: radial-gradient(ellipse at 10% 20%, rgba(255, 0, 0, 0.15) 0%, transparent 30%),
+                        radial-gradient(ellipse at 90% 80%, rgba(255, 0, 0, 0.15) 0%, transparent 30%),
+                        radial-gradient(ellipse at 50% 50%, rgba(212, 175, 55, 0.08) 0%, transparent 40%);
+      z-index: 0;
+    }
+
+    .cny-pattern::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-image: repeating-linear-gradient(45deg, transparent, transparent 100px, rgba(212, 175, 55, 0.02) 100px, rgba(212, 175, 55, 0.02) 102px),
+                        repeating-linear-gradient(-45deg, transparent, transparent 100px, rgba(255, 0, 0, 0.02) 100px, rgba(255, 0, 0, 0.02) 102px);
+    }
+
+    /* Fireworks Animation - Versi Hype & Meriah */
+    .firework {
+      position: fixed;
+      width: 8px;
+      height: 8px;
+      background: #ffd700;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 2;
+      box-shadow: 0 0 20px #ffd700, 0 0 40px #ff4500, 0 0 60px #ffff00;
+    }
+
+    @keyframes fireworkExplode {
+      0% { transform: translate(0, 0) scale(1); opacity: 1; }
+      60% { transform: translate(var(--tx), var(--ty)) scale(1.8); opacity: 0.9; }
+      100% { transform: translate(var(--tx), var(--ty)) scale(0.2); opacity: 0; }
+    }
+
+    .firework-secondary {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background: inherit;
+      border-radius: 50%;
+      box-shadow: 0 0 15px inherit;
+      animation: secondaryBurst 0.6s ease-out forwards;
+    }
+
+    @keyframes secondaryBurst {
+      0% { transform: scale(0); opacity: 1; }
+      100% { transform: scale(3); opacity: 0; }
+    }
+
+    /* Lion Dance, Lanterns, dll tetap sama */
+    .lion-dance {
+      position: fixed;
+      bottom: -100px;
+      left: -150px;
+      width: 120px;
+      height: 80px;
+      background: linear-gradient(135deg, #ff0000 0%, #ff6600 100%);
+      border-radius: 40% 40% 20% 20%;
+      z-index: 1;
+      animation: lionWalk 20s linear infinite;
+      opacity: 0.4;
+      filter: blur(1px);
+    }
+
+    .lion-dance::before {
+      content: '';
+      position: absolute;
+      top: -20px;
+      left: 20px;
+      width: 50px;
+      height: 50px;
+      background: radial-gradient(circle, #ffd700 30%, transparent 31%, transparent 40%, #ffd700 41%, #ffd700 50%, transparent 51%);
+      border-radius: 50%;
+    }
+
+    .lion-dance::after {
+      content: '';
+      position: absolute;
+      bottom: -15px;
+      left: 10px;
+      width: 100px;
+      height: 20px;
+      background: linear-gradient(90deg, #ff0000, #ff6600, #ffd700);
+      border-radius: 10px;
+      animation: lionTail 1s ease-in-out infinite;
+    }
+
+    @keyframes lionWalk {
+      0% { left: -150px; bottom: -100px; }
+      50% { left: calc(50% - 60px); bottom: 0px; }
+      100% { left: calc(100% + 150px); bottom: -100px; }
+    }
+
+    @keyframes lionTail {
+      0%, 100% { transform: rotate(-5deg); }
+      50% { transform: rotate(5deg); }
+    }
+
+    .lantern {
+      position: fixed;
+      width: 40px;
+      height: 60px;
+      background: linear-gradient(180deg, rgba(139, 0, 0, 0.4) 0%, rgba(139, 0, 0, 0.2) 100%);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      border-radius: 20px;
+      z-index: 0;
+      animation: floatLantern 20s infinite ease-in-out;
+      opacity: 0.6;
+    }
+
+    .lantern::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 20px;
+      height: 20px;
+      background: radial-gradient(circle, rgba(255, 215, 0, 0.3), transparent);
+      border-radius: 50%;
+    }
+
+    .lantern::after {
+      content: '';
+      position: absolute;
+      bottom: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 1px;
+      height: 15px;
+      background: rgba(212, 175, 55, 0.4);
+    }
+
+    @keyframes floatLantern {
+      0%, 100% { transform: translateY(0) translateX(0); }
+      50% { transform: translateY(-30px) translateX(20px); }
+    }
+
+    .shimmer {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      background: linear-gradient(90deg, transparent 0%, rgba(212, 175, 55, 0.03) 25%, rgba(212, 175, 55, 0.06) 50%, rgba(212, 175, 55, 0.03) 75%, transparent 100%);
+      background-size: 200% 100%;
+      animation: shimmerMove 8s infinite linear;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    @keyframes shimmerMove {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+
+    .light-beam {
+      position: fixed;
+      width: 2px;
+      height: 100%;
+      background: linear-gradient(to bottom, transparent, rgba(212, 175, 55, 0.15), transparent);
+      animation: beamMove 12s infinite linear;
+      z-index: 0;
+      filter: blur(2px);
+    }
+
+    @keyframes beamMove {
+      0% { left: -5%; opacity: 0; }
+      50% { opacity: 1; }
+      100% { left: 105%; opacity: 0; }
+    }
+
+    .container {
+      background: rgba(15, 15, 15, 0.95);
+      border-radius: 2px;
+      padding: 40px 25px;
+      max-width: 480px;
+      width: 95%;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      position: relative;
+      z-index: 1;
+      backdrop-filter: blur(20px);
+    }
+
+    .container::before, .container::after {
+      content: '';
+      position: absolute;
+      width: 25px;
+      height: 25px;
+      border: 1px solid rgba(212, 175, 55, 0.4);
+    }
+
+    .container::before {
+      top: -1px;
+      left: -1px;
+      border-right: none;
+      border-bottom: none;
+    }
+
+    .container::after {
+      bottom: -1px;
+      right: -1px;
+      border-left: none;
+      border-top: none;
+    }
+
+    .logo-section {
+      text-align: center;
+      margin-bottom: 40px;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease-out 0.2s forwards;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 48px;
+      font-weight: 900;
+      color: #D4AF37;
+      letter-spacing: 6px;
+      margin-bottom: 15px;
+      position: relative;
+      display: inline-block;
+    }
+
+    .logo::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #D4AF37, transparent);
+    }
+
+    .subtitle {
+      font-size: 12px;
+      font-weight: 300;
+      color: rgba(212, 175, 55, 0.8);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-top: 20px;
+    }
+
+    .input-section {
+      margin: 40px 0;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease-out 0.4s forwards;
+    }
+
+    .input-label {
+      color: rgba(212, 175, 55, 0.9);
+      font-size: 11px;
+      font-weight: 600;
+      margin-bottom: 15px;
+      text-align: center;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .input-wrapper {
+      position: relative;
+    }
+
+    #userId {
+      width: 100%;
+      padding: 16px 20px;
+      font-size: 15px;
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      border-radius: 0;
+      background: rgba(212, 175, 55, 0.03);
+      color: #D4AF37;
+      text-align: center;
+      outline: none;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      font-weight: 300;
+      letter-spacing: 2px;
+    }
+
+    #userId::placeholder {
+      color: rgba(212, 175, 55, 0.3);
+      font-weight: 300;
+    }
+
+    #userId:focus {
+      border-color: rgba(212, 175, 55, 0.6);
+      background: rgba(212, 175, 55, 0.05);
+      box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.1);
+    }
+
+    .input-hint {
+      color: rgba(212, 175, 55, 0.5);
+      font-size: 10px;
+      text-align: center;
+      margin-top: 10px;
+      font-weight: 300;
+      letter-spacing: 1px;
+    }
+
+    .envelope-selection {
+      display: none;
+      margin: 40px 0;
+      opacity: 0;
+      animation: fadeInUp 0.8s ease-out forwards;
+    }
+
+    .selection-title {
+      color: rgba(212, 175, 55, 0.9);
+      font-size: 11px;
+      font-weight: 600;
+      margin-bottom: 30px;
+      text-align: center;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .envelopes-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .envelope-item {
+      cursor: pointer;
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+
+    .envelope-item:hover {
+      transform: translateY(-8px);
+    }
+
+    .envelope {
+      width: 100%;
+      aspect-ratio: 3/4;
+      background: linear-gradient(180deg, #8B0000 0%, #5a0000 100%);
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(212, 175, 55, 0.4);
+    }
+
+    .envelope::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+      animation: rotate 15s linear infinite;
+    }
+
+    @keyframes rotate {
+      100% { transform: rotate(360deg); }
+    }
+
+    .envelope-border {
+      position: absolute;
+      inset: 0;
+      border: 1px solid rgba(212, 175, 55, 0.5);
+      pointer-events: none;
+    }
+
+    .envelope-symbol {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13px;
+      color: #D4AF37;
+      font-weight: 900;
+      opacity: 1;
+      text-align: center;
+      line-height: 1.3;
+      letter-spacing: 1px;
+      text-shadow: 0 0 10px rgba(212, 175, 55, 0.8), 0 0 20px rgba(212, 175, 55, 0.6), 0 0 30px rgba(212, 175, 55, 0.4), 2px 2px 4px rgba(0, 0, 0, 0.8);
+      background: linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FFD700 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-size: 200% 200%;
+      animation: goldShine 3s ease-in-out infinite;
+    }
+
+    @keyframes goldShine {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    .envelope-number {
+      position: absolute;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 8px;
+      color: rgba(212, 175, 55, 0.6);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      font-weight: 300;
+    }
+
+    .envelope-item.selected .envelope {
+      animation: envelopeOpen 0.6s ease-out forwards;
+    }
+
+    @keyframes envelopeOpen {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.1); opacity: 0.8; }
+      100% { transform: scale(0.9); opacity: 0; }
+    }
+
+    .prize-section {
+      display: none;
+      text-align: center;
+      opacity: 0;
+      animation: fadeInScale 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    @keyframes fadeInScale {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .prize-container {
+      background: rgba(212, 175, 55, 0.03);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      padding: 40px 25px;
+      margin: 30px 0;
+      position: relative;
+    }
+
+    .prize-container::before, .prize-container::after {
+      content: '';
+      position: absolute;
+      width: 25px;
+      height: 25px;
+      border: 1px solid rgba(212, 175, 55, 0.4);
+    }
+
+    .prize-container::before {
+      top: -1px;
+      left: -1px;
+      border-right: none;
+      border-bottom: none;
+    }
+
+    .prize-container::after {
+      bottom: -1px;
+      right: -1px;
+      border-left: none;
+      border-top: none;
+    }
+
+    .congrats-text {
+      color: rgba(212, 175, 55, 0.9);
+      font-size: 11px;
+      font-weight: 600;
+      margin-bottom: 30px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    .prize-amount {
+      font-family: 'Playfair Display', serif;
+      font-size: 48px;
+      font-weight: 700;
+      color: #D4AF37;
+      margin: 25px 0;
+      letter-spacing: 2px;
+    }
+
+    .prize-label {
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 11px;
+      margin-bottom: 40px;
+      font-weight: 300;
+      letter-spacing: 2px;
+    }
+
+    .claim-button {
+      display: inline-block;
+      background: transparent;
+      color: #D4AF37;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 16px 50px;
+      border: 1px solid rgba(212, 175, 55, 0.5);
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .claim-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: rgba(212, 175, 55, 0.1);
+      transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .claim-button:hover {
+      border-color: #D4AF37;
+      box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+    }
+
+    .claim-button:hover::before {
+      left: 0;
+    }
+
+    .claim-button span {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hidden { display: none !important; }
+
+    .particle {
+      position: fixed;
+      width: 2px;
+      height: 2px;
+      background: rgba(212, 175, 55, 0.3);
+      pointer-events: none;
+      z-index: 0;
+      animation: particleFall linear forwards;
+    }
+
+    @keyframes particleFall {
+      to { transform: translateY(100vh); opacity: 0; }
+    }
+
+    @media (min-width: 768px) {
+      .container { padding: 60px 50px; max-width: 600px; }
+      .logo { font-size: 56px; letter-spacing: 7px; }
+      .envelopes-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+      .envelope-symbol { font-size: 15px; }
+      .prize-amount { font-size: 64px; }
+    }
+
+    @media (max-width: 360px) {
+      .logo { font-size: 40px; letter-spacing: 4px; }
+      .envelope-symbol { font-size: 11px; }
+      .prize-amount { font-size: 40px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-overlay"></div>
+  <div class="cny-pattern"></div>
+  <div class="shimmer"></div>
+  <div class="light-beam" style="animation-delay: 0s;"></div>
+  <div class="light-beam" style="animation-delay: 6s;"></div>
+
+  <!-- Floating Lanterns -->
+  <div class="lantern" style="top: 10%; left: 5%; animation-delay: 0s; animation-duration: 18s;"></div>
+  <div class="lantern" style="top: 15%; right: 8%; animation-delay: 4s; animation-duration: 22s;"></div>
+  <div class="lantern" style="top: 60%; left: 10%; animation-delay: 8s; animation-duration: 20s;"></div>
+  <div class="lantern" style="top: 70%; right: 5%; animation-delay: 12s; animation-duration: 19s;"></div>
+
+  <!-- Lion Dance -->
+  <div class="lion-dance"></div>
+
+  <!-- Audio Tema Imlek -->
+  <audio id="bgMusic" loop preload="auto">
+    <source src="https://cdn.pixabay.com/download/audio/2026/01/14/audio_3265c1aace.mp3" type="audio/mpeg">
+    Browser Anda tidak mendukung elemen audio.
+  </audio>
+
+  <div class="container">
+    <div class="logo-section">
+      <div class="logo">KISAHSLOT</div>
+      <div class="subtitle">Angpao Gratis</div>
+    </div>
+
+    <div class="input-section" id="inputSection">
+      <div class="input-label">Masukkan User ID</div>
+      <div class="input-wrapper">
+        <input type="text" id="userId" placeholder="cuan123" autocomplete="off">
+      </div>
+      <div class="input-hint">Harap masukkan User ID Anda</div>
+    </div>
+
+    <div class="envelope-selection" id="envelopeSelection">
+      <div class="selection-title">Pilih Angpao Kamu Sekarang</div>
+      <div class="envelopes-grid">
+        <div class="envelope-item" onclick="selectEnvelope(1)">
+          <div class="envelope">
+            <div class="envelope-border"></div>
+            <div class="envelope-symbol">KISAH<br>SLOT</div>
+            <div class="envelope-number">Angpao #1</div>
+          </div>
+        </div>
+        <div class="envelope-item" onclick="selectEnvelope(2)">
+          <div class="envelope">
+            <div class="envelope-border"></div>
+            <div class="envelope-symbol">KISAH<br>SLOT</div>
+            <div class="envelope-number">Angpao #2</div>
+          </div>
+        </div>
+        <div class="envelope-item" onclick="selectEnvelope(3)">
+          <div class="envelope">
+            <div class="envelope-border"></div>
+            <div class="envelope-symbol">KISAH<br>SLOT</div>
+            <div class="envelope-number">Angpao #3</div>
+          </div>
+        </div>
+        <div class="envelope-item" onclick="selectEnvelope(4)">
+          <div class="envelope">
+            <div class="envelope-border"></div>
+            <div class="envelope-symbol">KISAH<br>SLOT</div>
+            <div class="envelope-number">Angpao #4</div>
+          </div>
+        </div>
+        <div class="envelope-item" onclick="selectEnvelope(5)">
+          <div class="envelope">
+            <div class="envelope-border"></div>
+            <div class="envelope-symbol">KISAH<br>SLOT</div>
+            <div class="envelope-number">Angpao #5</div>
+          </div>
+        </div>
+        <div class="envelope-item" onclick="selectEnvelope(6)">
+          <div class="envelope">
+            <div class="envelope-border"></div>
+            <div class="envelope-symbol">KISAH<br>SLOT</div>
+            <div class="envelope-number">Angpao #6</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="prize-section" id="prizeSection">
+      <div class="prize-container">
+        <div class="congrats-text">Selamat!</div>
+        <div class="prize-amount" id="prizeAmount">Rp 0</div>
+        <div class="prize-label">Hadiah eksklusif untuk Anda</div>
+        <a href="https://static.zdassets.com/web_widget/latest/liveChat.html?v=10#key=kisahslot777.zendesk.com&settings=JTdCJTIyd2ViV2lkZ2V0JTIyJTNBJTdCJTIyY2hhdCUyMiUzQSU3QiUyMnRpdGxlJTIyJTNBbnVsbCUyQyUyMm1lbnVPcHRpb25zJTIyJTNBJTdCJTIyZW1haWxUcmFuc2NyaXB0JTIyJTNBdHJ1ZSU3RCUyQyUyMmRlcGFydG1lbnRzJTIyJTNBJTdCJTdEJTJDJTIycHJlY2hhdEZvcm0lMjIlM0ElN0IlMjJkZXBhcnRtZW50TGFiZWwlMjIlM0FudWxsJTJDJTIyZ3JlZXRpbmclMjIlM0FudWxsJTdEJTJDJTIyb2ZmbGluZUZvcm0lMjIlM0ElN0IlMjJncmVldGluZyUyMiUzQW51bGwlN0QlMkMlMjJjb25jaWVyZ2UlMjIlM0ElN0IlMjJhdmF0YXJQYXRoJTIyJTNBbnVsbCUyQyUyMm5hbWUlMjIlM0FudWxsJTJDJTIydGl0bGUlMjIlM0FudWxsJTdEJTdEJTJDJTIyY29sb3IlMjIlM0ElN0IlMjJhcnRpY2xlTGlua3MlMjIlM0ElMjIlMjIlMkMlMjJidXR0b24lMjIlM0ElMjIlMjIlMkMlMjJoZWFkZXIlMjIlM0ElMjIlMjIlMkMlMjJsYXVuY2hlciUyMiUzQSUyMiUyMiUyQyUyMmxhdW5jaGVyVGV4dCUyMiUzQSUyMiUyMiUyQyUyMnJlc3VsdExpc3RzJTIyJTNBJTIyJTIyJTJDJTIydGhlbWUlMjIlM0FudWxsJTdEJTdEJTdE&&locale=en-us&title=Web%20Widget%20Live%20Chat" 
+           class="claim-button" target="_blank">
+          <span>Klaim Hadiah</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const prizes = [
+      'Rp 200.000', 'Rp 300.000', 'Rp 500.000',
+      'Rp 600.000', 'Rp 700.000', 'Rp 800.000', 'Rp 1.000.000'
+    ];
+
+    let selectedEnvelopeNumber = 0;
+
+    // Fireworks lebih hype
+    function createFirework(x, y) {
+      const colors = ['#ffd700', '#ff4500', '#ffff00', '#ff1493', '#00ffff', '#ff8c00', '#ffffff'];
+      const particleCount = 20 + Math.floor(Math.random() * 5); // 20-24 partikel
+
+      for (let i = 0; i < particleCount; i++) {
+        const firework = document.createElement('div');
+        firework.className = 'firework';
+        firework.style.left = x + 'px';
+        firework.style.top = y + 'px';
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        firework.style.background = color;
+        firework.style.boxShadow = `0 0 25px ${color}, 0 0 50px ${color}`;
+
+        const angle = (Math.PI * 2 * i) / particleCount + (Math.random() - 0.5) * 0.4;
+        const velocity = 80 + Math.random() * 120;
+        const tx = Math.cos(angle) * velocity;
+        const ty = Math.sin(angle) * velocity - 80; // Naik dulu
+
+        firework.style.setProperty('--tx', tx + 'px');
+        firework.style.setProperty('--ty', ty + 'px');
+        firework.style.animation = `fireworkExplode ${1.0 + Math.random() * 0.6}s ease-out forwards`;
+
+        document.body.appendChild(firework);
+
+        // Secondary burst
+        setTimeout(() => {
+          const secondary = document.createElement('div');
+          secondary.className = 'firework-secondary';
+          secondary.style.left = (x + tx) + 'px';
+          secondary.style.top = (y + ty) + 'px';
+          secondary.style.background = color;
+          document.body.appendChild(secondary);
+          setTimeout(() => secondary.remove(), 800);
+        }, 400 + Math.random() * 200);
+
+        setTimeout(() => firework.remove(), 2000);
+      }
+    }
+
+    function randomFireworks() {
+      setInterval(() => {
+        const x = Math.random() * window.innerWidth;
+        const y = Math.random() * (window.innerHeight * 0.7);
+        createFirework(x, y);
+      }, 1800 + Math.random() * 700); // lebih sering
+    }
+
+    // Particles jatuh
+    function createParticles() {
+      setInterval(() => {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.top = '-10px';
+        particle.style.animationDuration = (Math.random() * 3 + 4) + 's';
+        document.body.appendChild(particle);
+        setTimeout(() => particle.remove(), 7000);
+      }, 400);
+    }
+
+    // Audio Imlek
+    window.addEventListener('load', () => {
+      randomFireworks();
+      createParticles();
+
+      const bgMusic = document.getElementById('bgMusic');
+      bgMusic.volume = 0.25;
+      bgMusic.play().catch(() => {
+        document.addEventListener('click', () => {
+          bgMusic.play();
+        }, { once: true });
+      });
+    });
+
+    // Fungsi envelope
+    document.getElementById('userId').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        proceedToEnvelopeSelection();
+      }
+    });
+
+    function proceedToEnvelopeSelection() {
+      const userId = document.getElementById('userId').value.trim();
+      if (!userId) {
+        const input = document.getElementById('userId');
+        input.style.borderColor = 'rgba(212, 175, 55, 0.8)';
+        input.focus();
+        setTimeout(() => {
+          input.style.borderColor = 'rgba(212, 175, 55, 0.3)';
+        }, 1000);
+        return;
+      }
+
+      document.getElementById('inputSection').style.transition = 'opacity 0.5s ease-out';
+      document.getElementById('inputSection').style.opacity = '0';
+      setTimeout(() => {
+        document.getElementById('inputSection').classList.add('hidden');
+        document.getElementById('envelopeSelection').style.display = 'block';
+      }, 500);
+    }
+
+    function selectEnvelope(envelopeNumber) {
+      if (selectedEnvelopeNumber !== 0) return;
+      selectedEnvelopeNumber = envelopeNumber;
+
+      const envelopes = document.querySelectorAll('.envelope-item');
+      envelopes[envelopeNumber - 1].classList.add('selected');
+
+      setTimeout(() => {
+        document.getElementById('envelopeSelection').style.opacity = '0';
+        setTimeout(() => {
+          document.getElementById('envelopeSelection').classList.add('hidden');
+          const randomPrize = prizes[Math.floor(Math.random() * prizes.length)];
+          document.getElementById('prizeAmount').textContent = randomPrize;
+          document.getElementById('prizeSection').style.display = 'block';
+          createRewardParticles();
+        }, 500);
+      }, 600);
+    }
+
+    function createRewardParticles() {
+      for (let i = 0; i < 40; i++) {
+        setTimeout(() => {
+          const particle = document.createElement('div');
+          particle.className = 'particle';
+          particle.style.left = Math.random() * 100 + '%';
+          particle.style.top = '0';
+          particle.style.width = '3px';
+          particle.style.height = '3px';
+          particle.style.background = 'rgba(212, 175, 55, 0.6)';
+          particle.style.animationDuration = (Math.random() * 2 + 2) + 's';
+          document.body.appendChild(particle);
+          setTimeout(() => particle.remove(), 4000);
+        }, i * 40);
+      }
+    }
+
+    // Tombol lanjutkan
+    let continueButton = document.createElement('button');
+    continueButton.textContent = 'Lanjutkan';
+    continueButton.style.cssText = `
+      display: block;
+      margin: 25px auto 0;
+      background: transparent;
+      color: #D4AF37;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 14px 45px;
+      border: 1px solid rgba(212, 175, 55, 0.5);
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-family: 'Montserrat', sans-serif;
+    `;
+    continueButton.onmouseover = () => {
+      continueButton.style.borderColor = '#D4AF37';
+      continueButton.style.boxShadow = '0 0 20px rgba(212, 175, 55, 0.2)';
+    };
+    continueButton.onmouseout = () => {
+      continueButton.style.borderColor = 'rgba(212, 175, 55, 0.5)';
+      continueButton.style.boxShadow = 'none';
+    };
+    continueButton.onclick = proceedToEnvelopeSelection;
+    document.getElementById('inputSection').appendChild(continueButton);
+  </script>
+</body>
+</html>
